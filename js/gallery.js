@@ -79,38 +79,18 @@ const createGalleryItem = image => {
 
 const galleryList = document.querySelector('.gallery');
 
-const galleryItems = images
-  .map(
-    image => `
-  <li class="gallery-item">
-    <a class="gallery-link" href="${image.original}" onclick="event.preventDefault()">
-      <img
-        class="gallery-image"
-        src="${image.preview}"
-        data-source="${image.original}"
-        alt="${image.description}"
-      />
-    </a>
-  </li>
-`
-  )
-  .join('');
+const galleryItems = images.map(image => createGalleryItem(image)).join('');
 
 galleryList.innerHTML = galleryItems;
 
 galleryList.addEventListener('click', event => {
   event.preventDefault();
   if (event.target.tagName === 'IMG') {
-    console.log(event.target.dataset.source);
+    const instance = basicLightbox.create(`
+      <div class="modal">
+          <img src="${event.target.dataset.source}" width="1112">
+      </div>
+    `);
+    instance.show();
   }
-});
-
-galleryList.addEventListener('click', event => {
-  event.preventDefault();
-  const instance = basicLightbox.create(`
-    <div class="modal">
-        <img src="${event.target.dataset.source}" width="1112" >
-    </div>
-`);
-  instance.show();
 });
